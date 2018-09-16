@@ -11,16 +11,32 @@ public class ClickDetector : MonoBehaviour
     private float remainingClickTime;
     [SerializeField] private Text timerText;
     [SerializeField] private Image timerBar;
+    private bool thirdPersonMode;
+    private Transform initialPoint;
+    private float m;
+    private float b;
 
     private void Awake()
     {
         gm = GetComponent<TrajGameManager>();
     }
     void Update()
-    {   
+    {
         Ray ray;
         RaycastHit hit;
-        ray = Camera.main.ScreenPointToRay(Input.mousePosition);
+        Vector2 screenPoint = Input.mousePosition;
+        if (thirdPersonMode)
+        {
+            //in screenspace, we need to find the closest point to the line defined by y=mx+b
+            Vector3 u = Input.mousePosition;
+            float m2 = -1 / m;
+            float b2 = u.y - m2 * u.x;
+            //equation m2*x+b2=m*x+b where x is the x value of the closest point on the line
+            float x = (b - b2) / (m2 - m);
+            float y = m * x + b;
+            screenPoint = new Vector2(x,y);
+        }
+        ray = Camera.main.ScreenPointToRay(screenPoint);
         if (Physics.Raycast(ray, out hit))
         {
             mouseIndicator.SetActive(true);
@@ -42,8 +58,8 @@ public class ClickDetector : MonoBehaviour
             {
                 return;
             }
-           
         }
+     
         remainingClickTime -= Time.deltaTime;
         if (remainingClickTime < 0)
         {
@@ -62,4 +78,25 @@ public class ClickDetector : MonoBehaviour
         enabled = true;
         remainingClickTime = maxClickTime;
     }
+    public void RelayInfo(bool thirdPerson,Transform initial)
+    {
+        thirdPersonMode = thirdPerson;
+        if (!thirdPerson) return;
+
+        initialPoint = initial;
+        //calculate m and b
+        //m and b are from y=mx+b in screenspace
+        // m and b define the line ins screeenspace where we are allowed to guess the landing to happen in third person mode
+        Vector3 u = new Vector3(initial.position.x,0,initial.position.z);
+        Vector3 v = initial.forward;
+        v.y = 0;
+        Vector3 w = u + v;
+        //u and w are two worldspace positions contained in the line
+        //will convert to screenspace
+        u = Camera.main.WorldToScreenPoint(u);
+        w = Camera.main.WorldToScreenPoint(w);
+        //get y = mx+b in screen space
+        m = (w.y - u.y) / (w.x - u.x);
+        b = w.y - m * w.x;
+     }
 }

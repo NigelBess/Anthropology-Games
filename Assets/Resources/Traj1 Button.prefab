@@ -179,11 +179,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 39f4a2eb70957b14fa673a09ed55059e, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  playButtonImage: {fileID: 114723981813684006}
+  playButton: {fileID: 114385279979565312}
   infoText: {fileID: 114653628433639388}
   completeColor: {r: 1, g: 0, b: 0, a: 1}
   cm: {fileID: 0}
-  infoPrefab: {fileID: 0}
 --- !u!114 &114178625018330840
 MonoBehaviour:
   m_ObjectHideFlags: 1

@@ -6,7 +6,7 @@ using System.Linq;
 
 public class InfoUI : MonoBehaviour
 {
-    [SerializeField] private Image playButtonImage;
+    [SerializeField] private Button playButton;
     [SerializeField] private Text infoText;
     [SerializeField] private Color completeColor;
     [SerializeField] private MenuCanvasManager cm;
@@ -41,7 +41,7 @@ public class InfoUI : MonoBehaviour
                 break;
         }
         infoText.text = "Average Score: <color=yellow>" + gi.scores.Average().ToString("F2") + "</color> "+ units;
-        playButtonImage.color = completeColor;
+        playButton.targetGraphic.color = completeColor;
     }
     public void DetailedInfo()
     {

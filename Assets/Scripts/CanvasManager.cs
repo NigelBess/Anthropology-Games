@@ -35,11 +35,11 @@ public class CanvasManager : MonoBehaviour
     }
     public void AreYouSure()
     {
-        OpenCanvas(4);
+        OpenCanvas(4,false);
     }
     public void AreYouSure2()
     {
-        OpenCanvas(5);
+        OpenCanvas(5,false);
     }
 
 
@@ -51,5 +51,13 @@ public class CanvasManager : MonoBehaviour
         currentMenu = num;
         GameFunctions.OpenMenu(canvases,num);
     }
-
+    void OpenCanvas(int num,bool save)
+    {
+        if (save)
+        {
+            LastMenu = currentMenu;
+            currentMenu = num;
+        }
+        GameFunctions.OpenMenu(canvases, num);
+    }
 }

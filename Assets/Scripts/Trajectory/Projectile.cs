@@ -24,6 +24,7 @@ public class Projectile : MonoBehaviour
     private Vector3 previousPos;
     private Quaternion previousRot;
     [SerializeField] private float embeddingDist = 0.5f;
+    private bool thirdPersonMode;
 
 
 
@@ -81,7 +82,11 @@ public class Projectile : MonoBehaviour
   
     Vector3 NewVelocity()
     {
-        float sideAngle = Random.Range(-maxSideAngle,maxSideAngle)+initial.rotation.eulerAngles.y;
+        float sideAngle = initial.rotation.eulerAngles.y;
+        if (!thirdPersonMode)
+        {
+            sideAngle += Random.Range(-maxSideAngle, maxSideAngle);
+        }
         float upAngle = Random.Range(minUpAngle,maxUpAngle);
         float speed = Random.Range(minSpeed,maxSpeed);
         Vector3 outVar = Vector3.zero;
@@ -144,9 +149,10 @@ public class Projectile : MonoBehaviour
             previousRot = transform.rotation;
         }
     }
-    public void SetInitial(Transform t)
+    public void SetInitial(Transform t,bool thirdPerson)
     {
         initial = t;
+        thirdPersonMode = thirdPerson;
     }
 
 }

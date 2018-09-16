@@ -13,6 +13,7 @@ public class MenuCanvasManager : CanvasManager
     [SerializeField] private Text infoNumberText;
     [SerializeField] private Text infoErrorText;
     [SerializeField] private int maxScoresToList = 30;
+    private string targetSceneName;
     public void LogResults(List<float> scores,string units,PlayerInfo.Game game)
     {
         foreach (Transform child in infoWindowParent.transform)
@@ -32,8 +33,8 @@ public class MenuCanvasManager : CanvasManager
         }
         for (int i = 0; i < num; i++)
         {
-            GameObject.Instantiate(infoPrefab,infoWindowParent.transform);
-            infoPrefab.GetComponent<Text>().text = scores[i].ToString("F2");
+            GameObject infoObj = GameObject.Instantiate(infoPrefab,infoWindowParent.transform);
+            infoObj.GetComponent<Text>().text = scores[i].ToString("F2");
         }
         string titleText = "";
         switch (game)

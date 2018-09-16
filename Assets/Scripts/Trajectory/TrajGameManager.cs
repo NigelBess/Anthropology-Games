@@ -45,6 +45,7 @@ public class TrajGameManager : MonoBehaviour
         clickDetect.Stop();
         SetMode();
         ResetProjectiles();
+
     }
     void ResetProjectiles()
     {
@@ -70,8 +71,9 @@ public class TrajGameManager : MonoBehaviour
         }
         foreach (Projectile p in projectiles)
         {
-            p.SetInitial(startPoint);
+            p.SetInitial(startPoint,thirdPerson);
         }
+        clickDetect.RelayInfo(thirdPerson,startPoint);
     }
     void SetProj(int num)
     {
@@ -115,6 +117,8 @@ public class TrajGameManager : MonoBehaviour
     public void LogLand(Vector3 point)
     {
         OpenMenu(2);
+        point.y = 0;
+        clickedPoint.y = 0;
         float dist = Vector3.Distance(point,clickedPoint);
         afterLandText.text = "Your guess was <color=yellow>" + dist.ToString("F2") + "</color> meters off.";
         throws[numThrows] = dist;

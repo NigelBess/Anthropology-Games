@@ -7,7 +7,9 @@ using UnityEngine.UI;
 public class MenuGameManager : MonoBehaviour
 {
     [SerializeField]private PlayerInfo info;
-    [SerializeField] private InfoUI[] ui; 
+    [SerializeField] private InfoUI[] ui;
+    [SerializeField] private Button doubleCheckButton;
+    [SerializeField] private CanvasManager cm;
     private void Start()
     {
         info = PlayerInfo.instance;
@@ -19,21 +21,35 @@ public class MenuGameManager : MonoBehaviour
     public void Trajectory1()
     {  
         info.thirdPersonMode = false;
-        SceneManager.LoadScene("Trajectory");
+       TryToLoad("Trajectory",PlayerInfo.Game.traj1);
     }
     public void Trajectory2()
     {
         info.thirdPersonMode = true;
-        SceneManager.LoadScene("Trajectory");
+        TryToLoad("Trajectory", PlayerInfo.Game.traj2);
     }
     public void Tracking()
     {
-        SceneManager.LoadScene("AnimalTracking");
+        TryToLoad("AnimalTracking", PlayerInfo.Game.track);
     }
     public void ResetEverything()
     {
         Destroy(info.transform.gameObject);
         SceneManager.LoadScene("Menu");
     }
+    private void TryToLoad(string sceneName, PlayerInfo.Game game)
+    {
+        if (info.games[(int)game].completed)
+        {
+            cm.AreYouSure2();
+            doubleCheckButton.onClick.RemoveAllListeners();
+            doubleCheckButton.onClick.AddListener(delegate { SceneManager.LoadScene(sceneName); });
+        }
+        else
+        {
+            SceneManager.LoadScene(sceneName);
+        }
+    }
+
 
 }
