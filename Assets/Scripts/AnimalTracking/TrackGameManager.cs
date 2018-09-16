@@ -2,12 +2,14 @@
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
+using UnityEngine.SceneManagement;
 
 public class TrackGameManager : MonoBehaviour
 {
     [SerializeField]private Animal animal;
     [SerializeField]private CanvasManager cm;
     [SerializeField] private GameObject[] interfaceContents;
+    [SerializeField] private Text gameCompleteText;
     public void StartPlay()
     {
         cm.HUD();
@@ -22,6 +24,16 @@ public class TrackGameManager : MonoBehaviour
     public void LogDistance(float distance)
     {
         animal.transform.gameObject.SetActive(false);
+        cm.GameComplete();
         GameFunctions.OpenMenu(interfaceContents, 2);
+        gameCompleteText.text = "<color=yellow>" + distance.ToString("F2") + "</color> pixels";
+    }
+    public void Reset()
+    {
+        SceneManager.LoadScene(SceneManager.GetActiveScene().name);
+    }
+    public void Menu()
+    {
+        SceneManager.LoadScene("Menu");
     }
 }

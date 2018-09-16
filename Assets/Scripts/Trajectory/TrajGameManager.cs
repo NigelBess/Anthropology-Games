@@ -7,30 +7,46 @@ using UnityEngine.SceneManagement;
 public class TrajGameManager : MonoBehaviour
 {
 
-    public Projectile proj;
+    private Projectile proj;
     public ClickDetector clickDetect;
     public CanvasManager cm;
-
+    public Projectile[] projectiles;
     public GameObject[] menus;
 
     public Vector3 clickedPoint;
     public Text afterLandText;
     public Text gameCompleteText;
-    public int maxThrows;
+    [SerializeField]private int throwsPerProj = 2;
+    private int maxThrows;
     public GameObject throwLogPrefab;
     private int numThrows;
     private float[] throws;
+    private int currentProjectile;
 
     public GameObject parentOfLogs;
 
     private void Awake()
     {
-        proj.gm = this;
+        maxThrows = throwsPerProj * projectiles.Length;
+        SetProj(0);
+        foreach (Projectile p in projectiles)
+        {
+            p.gm = this;
+        }
         throws = new float[maxThrows];
         numThrows = 0;
         cm = GetComponent<CanvasManager>();
         clickDetect = GetComponent<ClickDetector>();
         clickDetect.Stop();
+    }
+    void SetProj(int num)
+    {
+        currentProjectile = num;
+        proj = projectiles[num];
+        for (int i = 0; i < projectiles.Length; i++)
+        {
+            projectiles[i].transform.gameObject.SetActive(i==num);
+        }
     }
     public void PrepNewThrow()
     {
@@ -41,6 +57,7 @@ public class TrajGameManager : MonoBehaviour
     }
     public void DoNewThrow()
     {
+        SetProj(numThrows/throwsPerProj);
         PrepNewThrow();
         Throw();
     }
@@ -68,7 +85,7 @@ public class TrajGameManager : MonoBehaviour
         afterLandText.text = "Your guess was " + dist.ToString("F2") + " meters off.";
         throws[numThrows] = dist;
         numThrows++;
-        UILogThrow(numThrows, dist);
+       // UILogThrow(numThrows, dist);
         if (numThrows >= maxThrows)
         {
             GameComplete();
@@ -123,5 +140,9 @@ public class TrajGameManager : MonoBehaviour
        //     report +=  throws[i].ToString() + ",\n";
        // }
        // System.IO.File.WriteAllText(path, report);
+    }
+    public void Menu()
+    {
+        SceneManager.LoadScene("Menu");
     }
 }
