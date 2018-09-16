@@ -6,6 +6,8 @@ public class CanvasManager : MonoBehaviour
 
 {
     public GameObject[] canvases;
+    private int LastMenu;
+    private int currentMenu;
 
 	void Awake ()
     {
@@ -23,17 +25,31 @@ public class CanvasManager : MonoBehaviour
     {
         OpenCanvas(2);
     }
-
+    public void Menu()
+    {
+        OpenCanvas(3);
+    }
+    public void Return()
+    {
+        OpenCanvas(LastMenu);
+    }
+    public void AreYouSure()
+    {
+        OpenCanvas(4);
+    }
+    public void AreYouSure2()
+    {
+        OpenCanvas(5);
+    }
 
 
 
 
     void OpenCanvas(int num)
     {
-        for (int i = 0; i < canvases.Length; i++)
-        {
-            canvases[i].SetActive(i == num);
-        }
+        LastMenu = currentMenu;
+        currentMenu = num;
+        GameFunctions.OpenMenu(canvases,num);
     }
 
 }

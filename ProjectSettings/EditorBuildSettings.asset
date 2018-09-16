@@ -6,15 +6,18 @@ EditorBuildSettings:
   serializedVersion: 2
   m_Scenes:
   - enabled: 0
-    path: Assets/Scenes/SampleScene.unity
-    guid: 99c9720ab356a0642a771bea13969a05
+    path: 
+    guid: 00000000000000000000000000000000
   - enabled: 1
     path: Assets/Scenes/Menu.unity
     guid: d7e63481293e10543bc781bbc8d8eb2c
   - enabled: 1
     path: Assets/Scenes/AnimalTracking.unity
     guid: cba5608e2bd4fee49b237acd18c02d07
-  - enabled: 1
+  - enabled: 0
     path: Assets/Scenes/Trajectory1.unity
     guid: 79f364c9a0f4e5443a3160ccc2869b1b
+  - enabled: 1
+    path: Assets/Scenes/Trajectory.unity
+    guid: ae94e639006663040b9eb6e07b2cda65
   m_configObjects: {}

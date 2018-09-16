@@ -4,7 +4,7 @@ using UnityEngine;
 
 public class Projectile : MonoBehaviour
 {
-    [SerializeField] private Transform initial;
+     private Transform initial;
     private Rigidbody rb;
     [SerializeField]private Renderer rend;
     [SerializeField] private float maxSideAngle = 10;
@@ -26,10 +26,7 @@ public class Projectile : MonoBehaviour
     [SerializeField] private float embeddingDist = 0.5f;
 
 
-    private void Awake()
-    {
-        Reset();
-    }
+
     public void Reset()
     {
         if (rb == null) rb = GetComponent<Rigidbody>();
@@ -84,7 +81,7 @@ public class Projectile : MonoBehaviour
   
     Vector3 NewVelocity()
     {
-        float sideAngle = Random.Range(-maxSideAngle,maxSideAngle);
+        float sideAngle = Random.Range(-maxSideAngle,maxSideAngle)+initial.rotation.eulerAngles.y;
         float upAngle = Random.Range(minUpAngle,maxUpAngle);
         float speed = Random.Range(minSpeed,maxSpeed);
         Vector3 outVar = Vector3.zero;
@@ -146,6 +143,10 @@ public class Projectile : MonoBehaviour
             transform.rotation = Quaternion.LookRotation(rb.velocity,transform.up);
             previousRot = transform.rotation;
         }
+    }
+    public void SetInitial(Transform t)
+    {
+        initial = t;
     }
 
 }

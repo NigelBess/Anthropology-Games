@@ -8,22 +8,27 @@ public class TrajGameManager : MonoBehaviour
 {
 
     private Projectile proj;
-    public ClickDetector clickDetect;
-    public CanvasManager cm;
-    public Projectile[] projectiles;
-    public GameObject[] menus;
+    [SerializeField] private bool defaultThirdPerson = false;
+    private PlayerInfo.Game gameType;
+    [SerializeField] private ClickDetector clickDetect;
+    [SerializeField] private CanvasManager cm;
+    [SerializeField] private Projectile[] projectiles;
+    [SerializeField] private Transform[] startPoints;
+    [SerializeField] private GameObject[] menus;
 
-    public Vector3 clickedPoint;
-    public Text afterLandText;
-    public Text gameCompleteText;
+    [SerializeField] private Vector3 clickedPoint;
+    [SerializeField] private Text afterLandText;
+    [SerializeField] private Text gameCompleteText;
     [SerializeField]private int throwsPerProj = 2;
     private int maxThrows;
-    public GameObject throwLogPrefab;
+    [SerializeField] private GameObject throwLogPrefab;
     private int numThrows;
     private float[] throws;
     private int currentProjectile;
+    private PlayerInfo info;
+    
 
-    public GameObject parentOfLogs;
+    [SerializeField] private GameObject parentOfLogs;
 
     private void Awake()
     {
@@ -38,6 +43,35 @@ public class TrajGameManager : MonoBehaviour
         cm = GetComponent<CanvasManager>();
         clickDetect = GetComponent<ClickDetector>();
         clickDetect.Stop();
+        SetMode();
+        ResetProjectiles();
+    }
+    void ResetProjectiles()
+    {
+        foreach (Projectile p in projectiles)
+        {
+            p.Reset();
+        }    
+    }
+    void SetMode()
+    {
+        if (info == null) info = PlayerInfo.instance;
+        bool thirdPerson = defaultThirdPerson;
+        if (info != null) thirdPerson = info.thirdPersonMode;
+        Transform startPoint = startPoints[0];
+        if (thirdPerson)
+        {
+            startPoint = startPoints[1];
+            gameType = PlayerInfo.Game.traj2;
+        }
+        else
+        {
+            gameType = PlayerInfo.Game.traj1;
+        }
+        foreach (Projectile p in projectiles)
+        {
+            p.SetInitial(startPoint);
+        }
     }
     void SetProj(int num)
     {
@@ -82,7 +116,7 @@ public class TrajGameManager : MonoBehaviour
     {
         OpenMenu(2);
         float dist = Vector3.Distance(point,clickedPoint);
-        afterLandText.text = "Your guess was " + dist.ToString("F2") + " meters off.";
+        afterLandText.text = "Your guess was <color=yellow>" + dist.ToString("F2") + "</color> meters off.";
         throws[numThrows] = dist;
         numThrows++;
        // UILogThrow(numThrows, dist);
@@ -98,9 +132,17 @@ public class TrajGameManager : MonoBehaviour
         string report = "";
         for (int i = 0; i < maxThrows; i++)
         {
-            report += "Throw "+(i+1).ToString()+": " + throws[i].ToString() + "\n"; 
+            report += "Throw "+(i+1).ToString()+": <color=yellow>" + throws[i].ToString("F2") + "</color> meters\n\n"; 
         }
         gameCompleteText.text = report;
+        if (info == null) info = PlayerInfo.instance;
+        if (info != null)
+        {
+            foreach (float f in throws)
+            {
+                info.LogScore(gameType,f);
+            }
+        }
     }
 
     public void UILogThrow(int num,float dist)
@@ -144,5 +186,10 @@ public class TrajGameManager : MonoBehaviour
     public void Menu()
     {
         SceneManager.LoadScene("Menu");
+    }
+    public void ClickTimedOut()
+    {
+        PrepNewThrow();
+        OpenMenu(3);    
     }
 }

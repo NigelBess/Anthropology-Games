@@ -15,9 +15,11 @@ public class Animal : MonoBehaviour
     [SerializeField] private float jumpSpeed = 5;
     private int remainingJumps;
     private action currentAction;
+    [SerializeField] private int minJumps = 2;
     [SerializeField] private int maxJumps = 3;
-    [SerializeField]private float maxIdleTime = 3;
     [SerializeField] private float minIdleTime = 1;
+    [SerializeField]private float maxIdleTime = 3;
+   
 
     private enum action
     {

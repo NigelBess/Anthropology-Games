@@ -1,18 +1,23 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class ClickDetector : MonoBehaviour
 {
     private TrajGameManager gm;
     public GameObject mouseIndicator;
+    [SerializeField] private float maxClickTime;
+    private float remainingClickTime;
+    [SerializeField] private Text timerText;
+    [SerializeField] private Image timerBar;
 
     private void Awake()
     {
         gm = GetComponent<TrajGameManager>();
     }
     void Update()
-    {
+    {   
         Ray ray;
         RaycastHit hit;
         ray = Camera.main.ScreenPointToRay(Input.mousePosition);
@@ -39,6 +44,13 @@ public class ClickDetector : MonoBehaviour
             }
            
         }
+        remainingClickTime -= Time.deltaTime;
+        if (remainingClickTime < 0)
+        {
+            gm.ClickTimedOut();
+        }
+        timerText.text = "Remaining Time: <color=yellow>"+remainingClickTime.ToString("F1")+"</color> seconds";
+        timerBar.fillAmount = remainingClickTime / maxClickTime;
     }
     public void Stop()
     {
@@ -48,5 +60,6 @@ public class ClickDetector : MonoBehaviour
     public void Begin()
     {
         enabled = true;
+        remainingClickTime = maxClickTime;
     }
 }

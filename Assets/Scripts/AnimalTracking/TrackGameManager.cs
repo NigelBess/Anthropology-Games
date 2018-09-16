@@ -10,6 +10,8 @@ public class TrackGameManager : MonoBehaviour
     [SerializeField]private CanvasManager cm;
     [SerializeField] private GameObject[] interfaceContents;
     [SerializeField] private Text gameCompleteText;
+    private PlayerInfo info;
+
     public void StartPlay()
     {
         cm.HUD();
@@ -27,6 +29,11 @@ public class TrackGameManager : MonoBehaviour
         cm.GameComplete();
         GameFunctions.OpenMenu(interfaceContents, 2);
         gameCompleteText.text = "<color=yellow>" + distance.ToString("F2") + "</color> pixels";
+        if (info == null) info = PlayerInfo.instance;
+        if (info != null)
+        {
+            info.LogScore(PlayerInfo.Game.track,distance);
+        }
     }
     public void Reset()
     {

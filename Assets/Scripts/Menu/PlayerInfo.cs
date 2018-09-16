@@ -7,6 +7,7 @@ public class PlayerInfo : MonoBehaviour
 {
     public gameInfo[] games;
     public static PlayerInfo instance;
+    public bool thirdPersonMode = false;
     
     public enum Game
     {
@@ -15,6 +16,7 @@ public class PlayerInfo : MonoBehaviour
         track,
         find
     }
+
     [System.Serializable]
     public struct gameInfo
     {
@@ -22,11 +24,17 @@ public class PlayerInfo : MonoBehaviour
         public bool completed;
     }
 	void Awake ()
-    {
-        DontDestroyOnLoad(this);
+    {   
+       
         if (instance != this)
         {
+            if (instance != null)
+            {
+                Destroy(transform.gameObject);
+                return;
+            }
             instance = this;
+            DontDestroyOnLoad(this);
         }
 	}
     public void LogScore(Game game,float score)
@@ -34,5 +42,5 @@ public class PlayerInfo : MonoBehaviour
         if (!games[(int)game].completed) games[(int)game].completed = true;
         games[(int)game].scores.Add(score);
     }
-	
+
 }
