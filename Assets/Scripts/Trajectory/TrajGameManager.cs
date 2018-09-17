@@ -119,6 +119,8 @@ public class TrajGameManager : MonoBehaviour
         OpenMenu(2);
         point.y = 0;
         clickedPoint.y = 0;
+        Debug.Log("your point: "+ clickedPoint.ToString()+" actual point: "+point.ToString());
+
         float dist = Vector3.Distance(point,clickedPoint);
         afterLandText.text = "Your guess was <color=yellow>" + dist.ToString("F2") + "</color> meters off.";
         throws[numThrows] = dist;

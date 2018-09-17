@@ -775,7 +775,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 873a802e5d1bc1c49a8521c16ea59048, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  defaultThirdPerson: 0
+  defaultThirdPerson: 1
   clickDetect: {fileID: 115603843}
   cm: {fileID: 0}
   projectiles:
@@ -808,7 +808,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   mouseIndicator: {fileID: 1047171275}
-  maxClickTime: 100
+  maxClickTime: 5
   timerText: {fileID: 773891985}
   timerBar: {fileID: 835502713}
 --- !u!114 &115603844
@@ -2325,6 +2325,34 @@ Prefab:
 Transform:
   m_PrefabParentObject: {fileID: 485434, guid: af33bf1514ece2845845fbb68d1ca5ff, type: 2}
   m_PrefabInternal: {fileID: 444429827}
+--- !u!1 &447811503
+GameObject:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  serializedVersion: 5
+  m_Component:
+  - component: {fileID: 447811504}
+  m_Layer: 0
+  m_Name: TextObj
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &447811504
+Transform:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 447811503}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_RootOrder: 15
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &485094859
 GameObject:
   m_ObjectHideFlags: 0
@@ -2775,47 +2803,47 @@ Prefab:
       objectReference: {fileID: 0}
     - target: {fileID: 1164619865281316, guid: 289252e26ad66b24bb4e901646ba8b77, type: 2}
       propertyPath: m_IsActive
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 224677575626961740, guid: 289252e26ad66b24bb4e901646ba8b77,
+        type: 2}
+      propertyPath: m_AnchorMin.y
       value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 224677575626961740, guid: 289252e26ad66b24bb4e901646ba8b77,
         type: 2}
-      propertyPath: m_AnchorMin.y
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 224677575626961740, guid: 289252e26ad66b24bb4e901646ba8b77,
-        type: 2}
       propertyPath: m_AnchorMax.y
-      value: 0
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 224677575626961740, guid: 289252e26ad66b24bb4e901646ba8b77,
         type: 2}
       propertyPath: m_AnchoredPosition.x
-      value: 0
+      value: 50
       objectReference: {fileID: 0}
     - target: {fileID: 224691962340320258, guid: 289252e26ad66b24bb4e901646ba8b77,
         type: 2}
       propertyPath: m_AnchorMin.y
-      value: 0
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 224691962340320258, guid: 289252e26ad66b24bb4e901646ba8b77,
         type: 2}
       propertyPath: m_AnchorMax.y
-      value: 0
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 224691962340320258, guid: 289252e26ad66b24bb4e901646ba8b77,
         type: 2}
       propertyPath: m_AnchoredPosition.x
-      value: 0
+      value: 50
       objectReference: {fileID: 0}
     - target: {fileID: 224677575626961740, guid: 289252e26ad66b24bb4e901646ba8b77,
         type: 2}
       propertyPath: m_AnchoredPosition.y
-      value: 0
+      value: -50
       objectReference: {fileID: 0}
     - target: {fileID: 224691962340320258, guid: 289252e26ad66b24bb4e901646ba8b77,
         type: 2}
       propertyPath: m_AnchoredPosition.y
-      value: 0
+      value: -170
       objectReference: {fileID: 0}
     - target: {fileID: 114183767765175164, guid: 289252e26ad66b24bb4e901646ba8b77,
         type: 2}
@@ -4596,7 +4624,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!114 &1043900082
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -8804,7 +8832,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!224 &2037527295
 RectTransform:
   m_ObjectHideFlags: 0

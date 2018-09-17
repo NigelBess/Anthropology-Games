@@ -125,7 +125,7 @@ public class Projectile : MonoBehaviour
         hasCollided = true;
         
         Debug.Log("detected a collision");
-        Vector3 landPoint = new Vector3(transform.position.x, 0, transform.position.z);
+        Vector3 landPoint = collision.contacts[0].point;
         if (!tumble)
         {
             rb.useGravity = false;

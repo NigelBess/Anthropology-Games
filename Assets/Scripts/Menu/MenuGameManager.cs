@@ -9,6 +9,8 @@ public class MenuGameManager : MonoBehaviour
     [SerializeField]private PlayerInfo info;
     [SerializeField] private InfoUI[] ui;
     [SerializeField] private Button doubleCheckButton;
+    [SerializeField] private Text doubleCheckButtonText;
+    [SerializeField] private Text doubleCheckText;
     [SerializeField] private CanvasManager cm;
     private void Start()
     {
@@ -44,11 +46,25 @@ public class MenuGameManager : MonoBehaviour
             cm.AreYouSure2();
             doubleCheckButton.onClick.RemoveAllListeners();
             doubleCheckButton.onClick.AddListener(delegate { SceneManager.LoadScene(sceneName); });
+            doubleCheckText.text = "You have already completed this task.\nWould you like to play again?";
+            doubleCheckButtonText.text = "Play Again";
         }
         else
         {
             SceneManager.LoadScene(sceneName);
         }
+    }
+    public void TryToQuit()
+    {
+        cm.AreYouSure2();
+        doubleCheckButton.onClick.RemoveAllListeners();
+        doubleCheckButton.onClick.AddListener(delegate { Quit(); });
+        doubleCheckText.text = "Are you sure you want to quit?\nYou will lose all data.";
+        doubleCheckButtonText.text = "Quit";
+    }
+    public void Quit()
+    {
+        Application.Quit();
     }
 
 
