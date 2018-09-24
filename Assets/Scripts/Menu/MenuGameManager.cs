@@ -34,6 +34,10 @@ public class MenuGameManager : MonoBehaviour
     {
         TryToLoad("AnimalTracking", PlayerInfo.Game.track);
     }
+    public void Find()
+    {
+        TryToLoad("Find", PlayerInfo.Game.find);
+    }
     public void ResetEverything()
     {
         Destroy(info.transform.gameObject);
