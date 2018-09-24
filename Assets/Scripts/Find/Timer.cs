@@ -7,12 +7,18 @@ public class Timer : MonoBehaviour
 {
     private float startTime;
     private Text timeText;
+    private float elapsedTime;
 
     private void Awake()
     {
         
-        enabled = false;
+        
         timeText = GetComponent<Text>();
+        Reset();
+    }
+    public void Reset()
+    {
+        enabled = false;
         timeText.text = "";
     }
     public void StartTimer()
@@ -22,11 +28,12 @@ public class Timer : MonoBehaviour
     }
     private void Update()
     {
-        timeText.text = GetTime().ToString("F2");
+        elapsedTime = Time.time - startTime;
+        timeText.text = elapsedTime.ToString("F2");
     }
     public float GetTime()
     {
-        return Time.time - startTime;
+        return elapsedTime;    
     }
     public void StopTimer()
     {

@@ -10,8 +10,7 @@ public class FindClickDetector : MonoBehaviour
     private bool clicked;
     private void Awake()
     {
-        enabled = false;
-        clicked = false;
+        Reset();
     }
     public void StartDetect()
     {
@@ -40,5 +39,11 @@ public class FindClickDetector : MonoBehaviour
     {
         enabled = false;
         timer.StopTimer();
+    }
+    public void Reset()
+    {
+        timer.Reset();
+        enabled = false;
+        clicked = false;
     }
 }

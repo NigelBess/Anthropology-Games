@@ -12,12 +12,47 @@ public class MenuGameManager : MonoBehaviour
     [SerializeField] private Text doubleCheckButtonText;
     [SerializeField] private Text doubleCheckText;
     [SerializeField] private CanvasManager cm;
+    [SerializeField] private Text titleText;
+    [SerializeField] private Text welcomeText;
     private void Start()
     {
         info = PlayerInfo.instance;
         for(int i = 0;i<info.games.Length;i++)
         {
             ui[i].Set(info.games[i],(PlayerInfo.Game)i);
+        }
+        SetText();
+    }
+    private void SetText()
+    {
+        bool any = false;
+        bool all = false;
+        for (int i = 0; i < info.games.Length; i++)
+        {
+            if (info.games[i].completed)
+            {
+                any = true;
+                break;
+            }
+        }
+        if (any)
+        {
+            titleText.text = "Please complete all remaining tasks, marked in <color=#00FF00>green</color>.";
+            welcomeText.enabled = false;
+            all = true;
+            for (int i = 0; i < info.games.Length; i++)
+            {
+                if (!info.games[i].completed)
+                {
+                    all = false;
+                    break;
+                }
+            }
+            if (all)
+            {
+                titleText.text = "You have completed all the tasks.";
+            }
+
         }
     }
     public void Trajectory1()

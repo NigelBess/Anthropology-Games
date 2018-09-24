@@ -3035,6 +3035,8 @@ MonoBehaviour:
   doubleCheckButtonText: {fileID: 381375482}
   doubleCheckText: {fileID: 1751200372}
   cm: {fileID: 911230827}
+  titleText: {fileID: 2131718647}
+  welcomeText: {fileID: 1111168313}
 --- !u!4 &1202257631
 Transform:
   m_ObjectHideFlags: 0

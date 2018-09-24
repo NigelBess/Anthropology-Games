@@ -1,6 +1,9 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.SceneManagement;
+using UnityEngine.UI;
+using System.Linq;
 
 public class FindGameManager : MonoBehaviour
 {
@@ -11,18 +14,59 @@ public class FindGameManager : MonoBehaviour
     [SerializeField] private DynamicText hudInfo;
     [SerializeField] private GameObject[] resultUI;
     [SerializeField] private FindClickDetector clickDetect;
+    [SerializeField] private Timer timer;
     [SerializeField] private GameObject timeCanvas;
+    [SerializeField] private Text nextButtonText;
+    [SerializeField] private Text averageText;
+    [SerializeField] private Text resultsText;
+    [SerializeField] private string[] animalNames;
+    private float[] scores;
+    private PlayerInfo info;
     private void Awake()
+    {
+        CloseAnimals();
+        CloseResult();
+        scores = new float[animalCanavases.Length];
+        info = PlayerInfo.instance;
+    }
+    private void CloseAnimals()
     {
         foreach (GameObject o in animalCanavases)
         {
-           if(o!=null) o.SetActive(false);
+            if (o != null) o.SetActive(false);
         }
     }
-    private void Next()
+    private void CloseResult()
+    {
+        GameFunctions.OpenMenu(resultUI, 0);
+    }
+    public void Next()
     {
         currentAnimal++;
-        CountDown(currentAnimal);
+        if (currentAnimal >= animalCanavases.Length)
+        {
+            SaveResults();
+            cm.GameComplete();
+            CloseAnimals();
+            SetResultsText();
+        }
+        else
+        {
+            CountDown(currentAnimal);
+            clickDetect.Reset();
+            CloseResult();
+        }
+        
+    }
+    private void SetResultsText()
+    {
+        averageText.text = "Average score: <color=yellow>" + scores.Average().ToString("F2")+ "</color> seconds";
+        string str = "";
+        for (int i = 0; i < scores.Length; i++)
+        {
+            str += animalNames[i] + ": <color=yellow>" + scores[i].ToString("F2") + "</color> seconds\n";
+        }
+        resultsText.text = str;
     }
     public void CountDown(int animalNum)
     {
@@ -44,7 +88,7 @@ public class FindGameManager : MonoBehaviour
     }
     public void Clicking()
     {
-        GameFunctions.OpenMenu(resultUI,0);//none
+        CloseResult();
     }
     public void LogClick(bool didHit)
     {
@@ -53,6 +97,16 @@ public class FindGameManager : MonoBehaviour
             clickDetect.StopDetect();
             GameFunctions.OpenMenu(resultUI, 2);//correct
             Debug.Log("you found it");
+            LogResult(currentAnimal,timer.GetTime());
+            if (currentAnimal >= animalCanavases.Length - 1)
+            {
+                nextButtonText.text = "View Results";
+            }
+            else
+            {
+                nextButtonText.text = "Next";
+            }
+            
         }
         else
         {
@@ -69,9 +123,26 @@ public class FindGameManager : MonoBehaviour
     private void ShowCountDown()
     {
         timeCanvas.SetActive(true);
-        foreach (GameObject g in animalCanavases)
+        CloseAnimals();
+    }
+    public void Menu()
+    {
+        SceneManager.LoadScene("Menu");
+    }
+    private void LogResult(int animalNum, float time)
+    {
+        scores[animalNum] = time;
+    }
+    private void SaveResults()
+    {
+        if (info == null) return;
+        foreach (float f in scores)
         {
-            if (g!=null) g.SetActive(false);
+            info.LogScore(PlayerInfo.Game.find,f);
         }
+    }
+    public void ResetAll()
+    {
+        SceneManager.LoadScene("Find");
     }
 }
