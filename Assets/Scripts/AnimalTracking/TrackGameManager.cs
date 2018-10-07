@@ -33,6 +33,7 @@ public class TrackGameManager : MonoBehaviour
         if (info != null)
         {
             info.LogScore(PlayerInfo.Game.track,distance);
+            info.Save("Animal_Tracking", distance.ToString("F3")+",");
         }
     }
     public void Reset()

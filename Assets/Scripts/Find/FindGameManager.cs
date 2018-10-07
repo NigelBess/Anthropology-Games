@@ -136,9 +136,10 @@ public class FindGameManager : MonoBehaviour
     private void SaveResults()
     {
         if (info == null) return;
-        foreach (float f in scores)
+        for(int i = 0; i < scores.Length;i++)
         {
-            info.LogScore(PlayerInfo.Game.find,f);
+            info.LogScore(PlayerInfo.Game.find,scores[i]);
+            info.Save("Animal_Finding",scores[i].ToString("F3")+", "+animalNames[i]+",");
         }
     }
     public void ResetAll()

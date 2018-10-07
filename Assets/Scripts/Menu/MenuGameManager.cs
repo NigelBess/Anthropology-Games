@@ -73,6 +73,10 @@ public class MenuGameManager : MonoBehaviour
     {
         TryToLoad("Find", PlayerInfo.Game.find);
     }
+    public void Rotation()
+    {
+        TryToLoad("Rotation", PlayerInfo.Game.rotation);
+    }
     public void ResetEverything()
     {
         Destroy(info.transform.gameObject);

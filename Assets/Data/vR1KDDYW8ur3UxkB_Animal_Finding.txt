@@ -1,0 +1,4 @@
+1.670, Pidgeon,
+0.937, Giraffe,
+0.939, Parrot,
+0.884, Wolf,

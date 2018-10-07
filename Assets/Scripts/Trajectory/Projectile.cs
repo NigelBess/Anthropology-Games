@@ -1,6 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.Rendering;
 
 public class Projectile : MonoBehaviour
 {
@@ -24,7 +25,9 @@ public class Projectile : MonoBehaviour
     private Vector3 previousPos;
     private Quaternion previousRot;
     [SerializeField] private float embeddingDist = 0.5f;
+    [SerializeField] private float demoTime = 4f;
     private bool thirdPersonMode;
+    private bool demo;
 
 
 
@@ -40,7 +43,7 @@ public class Projectile : MonoBehaviour
         rb.useGravity = false;
         col.enabled = true;
     }
-    public void Throw()
+    public void Throw(bool practice)
     {
         Reset();
         enabled = true;
@@ -50,7 +53,24 @@ public class Projectile : MonoBehaviour
         rb.velocity = NewVelocity();
         SetAngular();
         rend.enabled = true;
-        StartCoroutine(WaitForHangTime(hangTime));
+        if (!practice)
+        {
+            StartCoroutine(WaitForHangTime(hangTime));
+            demo = false;
+            gm.NoMenu();
+        }
+        else
+        {
+            StartCoroutine(WaitForRealThrow(demoTime));
+            rb.detectCollisions = true;
+            demo = true;
+        }
+        
+    }
+
+    public void Throw()
+    {
+        Throw(false);
     }
     void SetAngular()
     {
@@ -71,7 +91,11 @@ public class Projectile : MonoBehaviour
     {
         return Random.Range(minAngular,maxAngular);
     }
-
+    IEnumerator WaitForRealThrow(float time)
+    {
+        yield return new WaitForSeconds(time);
+        Throw();
+    }
     IEnumerator WaitForHangTime(float time)
     {
         yield return new WaitForSeconds(time);
@@ -110,7 +134,6 @@ public class Projectile : MonoBehaviour
         rb.angularVelocity = Vector3.zero;
         gm.WaitForInput();
     }
-
     public void UnPause()
     {
         rb.velocity = oldVelocity;
@@ -138,7 +161,7 @@ public class Projectile : MonoBehaviour
             col.enabled = false;
         }
             
-        gm.LogLand(landPoint);
+       if (!demo) gm.LogLand(landPoint);
     }
     private void Update()
     {
@@ -153,6 +176,17 @@ public class Projectile : MonoBehaviour
     {
         initial = t;
         thirdPersonMode = thirdPerson;
+    }
+    public void SetShadows(bool state)
+    {
+        if (state)
+        {
+            rend.shadowCastingMode = ShadowCastingMode.On;
+        }
+        else
+        {
+            rend.shadowCastingMode = ShadowCastingMode.Off;
+        }
     }
 
 }

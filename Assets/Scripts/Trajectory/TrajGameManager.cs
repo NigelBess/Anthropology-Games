@@ -19,33 +19,45 @@ public class TrajGameManager : MonoBehaviour
     [SerializeField] private Vector3 clickedPoint;
     [SerializeField] private Text afterLandText;
     [SerializeField] private Text gameCompleteText;
-    [SerializeField]private int throwsPerProj = 2;
+    [SerializeField]private int throwsPerProj = 3;
     private int maxThrows;
     [SerializeField] private GameObject throwLogPrefab;
     private int numThrows;
-    private float[] throws;
+    private result[] results;
     private int currentProjectile;
     private PlayerInfo info;
+    private string outputFileName;
+    private bool demoFirst = false;
+
+    [System.Serializable]
+    private struct result
+    {
+        public float distance;
+        public bool shadow;
+        public string projectile;
+    }
+
     
 
     [SerializeField] private GameObject parentOfLogs;
 
     private void Awake()
     {
-        maxThrows = throwsPerProj * projectiles.Length;
-        SetProj(0);
+        maxThrows = 2*throwsPerProj * projectiles.Length;//2 at the beggining is for with/without shadows
+        
         foreach (Projectile p in projectiles)
         {
             p.gm = this;
         }
-        throws = new float[maxThrows];
+        results = new result[maxThrows];
         numThrows = 0;
+        SetProj();
         cm = GetComponent<CanvasManager>();
         clickDetect = GetComponent<ClickDetector>();
         clickDetect.Stop();
         SetMode();
         ResetProjectiles();
-
+        demoFirst = true;
     }
     void ResetProjectiles()
     {
@@ -64,10 +76,12 @@ public class TrajGameManager : MonoBehaviour
         {
             startPoint = startPoints[1];
             gameType = PlayerInfo.Game.traj2;
+            outputFileName = "Trajectory_Third_Person";
         }
         else
         {
             gameType = PlayerInfo.Game.traj1;
+            outputFileName = "Trajectory_First_Person";
         }
         foreach (Projectile p in projectiles)
         {
@@ -75,14 +89,30 @@ public class TrajGameManager : MonoBehaviour
         }
         clickDetect.RelayInfo(thirdPerson,startPoint);
     }
-    void SetProj(int num)
+    void SetProj()
     {
-        currentProjectile = num;
+        int num =((numThrows / throwsPerProj) % 2); //cycles through 0 1nd 1 as numthrows changes from 0 to (maxThrows-1)
+        if (currentProjectile != num)
+        {
+            currentProjectile = num;
+            demoFirst = true;
+        }
+        else
+        {
+            demoFirst = false;
+        }
+        
         proj = projectiles[num];
+        string projName = "Arrow";
+        if (num > 0) projName = "Tennis Ball";
+        results[numThrows].projectile = projName;
         for (int i = 0; i < projectiles.Length; i++)
         {
             projectiles[i].transform.gameObject.SetActive(i==num);
         }
+        bool shadow = numThrows / throwsPerProj < 2;
+        proj.SetShadows(shadow);
+        results[numThrows].shadow = shadow;
     }
     public void PrepNewThrow()
     {
@@ -92,15 +122,23 @@ public class TrajGameManager : MonoBehaviour
         proj.Reset();
     }
     public void DoNewThrow()
-    {
-        SetProj(numThrows/throwsPerProj);
+    {   
+        SetProj();
         PrepNewThrow();
         Throw();
     }
     public void Throw()
     {   
-        proj.Throw();
-        NoMenu();
+        proj.Throw(demoFirst);
+        if (demoFirst)
+        {
+            OpenMenu(4);
+        }
+        else
+        {
+            NoMenu();
+        }
+        
         
     }
     public void WaitForInput()
@@ -122,8 +160,12 @@ public class TrajGameManager : MonoBehaviour
         Debug.Log("your point: "+ clickedPoint.ToString()+" actual point: "+point.ToString());
 
         float dist = Vector3.Distance(point,clickedPoint);
+        if (gameType == PlayerInfo.Game.traj2)
+        {
+            dist = Mathf.Abs(point.x - clickedPoint.x);
+        }
         afterLandText.text = "Your guess was <color=yellow>" + dist.ToString("F2") + "</color> meters off.";
-        throws[numThrows] = dist;
+        results[numThrows].distance = dist;
         numThrows++;
        // UILogThrow(numThrows, dist);
         if (numThrows >= maxThrows)
@@ -138,15 +180,18 @@ public class TrajGameManager : MonoBehaviour
         string report = "";
         for (int i = 0; i < maxThrows; i++)
         {
-            report += "Throw "+(i+1).ToString()+": <color=yellow>" + throws[i].ToString("F2") + "</color> meters\n\n"; 
+            report += "Throw "+(i+1).ToString()+": <color=yellow>" + results[i].distance.ToString("F2") + "</color> meters\n\n"; 
         }
         gameCompleteText.text = report;
         if (info == null) info = PlayerInfo.instance;
         if (info != null)
         {
-            foreach (float f in throws)
+            foreach (result r in results)
             {
-                info.LogScore(gameType,f);
+                info.LogScore(gameType,r.distance);
+                string shadowText = "No Shadow";
+                if (r.shadow) shadowText = "With Shadow";
+                info.Save(outputFileName,r.distance.ToString("F4")+", "+ shadowText+", "+r.projectile+",");
             }
         }
     }
@@ -169,7 +214,7 @@ public class TrajGameManager : MonoBehaviour
         }
 
     }
-    void NoMenu()
+    public void NoMenu()
     {
         OpenMenu(-1);
     }

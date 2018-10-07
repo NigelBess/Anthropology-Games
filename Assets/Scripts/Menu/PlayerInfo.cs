@@ -8,13 +8,16 @@ public class PlayerInfo : MonoBehaviour
     public gameInfo[] games;
     public static PlayerInfo instance;
     public bool thirdPersonMode = false;
+    private string identifier;
+    private DataLogger dl;
     
     public enum Game
     {
         traj1,
         traj2,
         track,
-        find
+        find,
+        rotation,
     }
 
     [System.Serializable]
@@ -36,11 +39,17 @@ public class PlayerInfo : MonoBehaviour
             instance = this;
             DontDestroyOnLoad(this);
         }
+        dl = GetComponent<DataLogger>();
+        identifier = GameFunctions.RandomString(16);
 	}
     public void LogScore(Game game,float score)
     {
         if (!games[(int)game].completed) games[(int)game].completed = true;
         games[(int)game].scores.Add(score);
+    }
+    public void Save(string fileName, string data)
+    {
+        dl.Save( identifier +"_" + fileName,data);
     }
 
 }
