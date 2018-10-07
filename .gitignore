@@ -3,7 +3,7 @@
 [Oo]bj/
 [Bb]uild/
 [Bb]uilds/
-Assets/Data/
+Assets/Data*
 Assets/AssetStoreTools*
 Assets/AssetStore*
 
