@@ -139,7 +139,7 @@ public class FindGameManager : MonoBehaviour
         for(int i = 0; i < scores.Length;i++)
         {
             info.LogScore(PlayerInfo.Game.find,scores[i]);
-            info.Save("Animal_Finding",scores[i].ToString("F3")+", "+animalNames[i]+",");
+            info.Save("Animal_Finding",scores[i].ToString("F3")+", "+i.ToString()+",");
         }
     }
     public void ResetAll()

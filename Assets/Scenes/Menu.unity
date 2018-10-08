@@ -2163,7 +2163,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 878ff00420c63b04da9bdc2543b2d214, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  directory: Data
+  directory: ResearchData
 --- !u!1 &714877821
 GameObject:
   m_ObjectHideFlags: 0

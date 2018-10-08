@@ -5,9 +5,9 @@ using UnityEngine.UI;
 
 public class Timer : MonoBehaviour
 {
-    private float startTime;
-    private Text timeText;
-    private float elapsedTime;
+    protected float startTime;
+    protected Text timeText;
+    protected float elapsedTime;
 
     private void Awake()
     {
@@ -26,7 +26,7 @@ public class Timer : MonoBehaviour
         enabled = true;
         startTime = Time.time;
     }
-    private void Update()
+    public virtual void Update()
     {
         elapsedTime = Time.time - startTime;
         timeText.text = elapsedTime.ToString("F2");

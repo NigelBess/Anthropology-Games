@@ -103,8 +103,8 @@ public class TrajGameManager : MonoBehaviour
         }
         
         proj = projectiles[num];
-        string projName = "Arrow";
-        if (num > 0) projName = "Tennis Ball";
+        string projName = "0";
+        if (num > 0) projName = "1";
         results[numThrows].projectile = projName;
         for (int i = 0; i < projectiles.Length; i++)
         {
@@ -189,8 +189,8 @@ public class TrajGameManager : MonoBehaviour
             foreach (result r in results)
             {
                 info.LogScore(gameType,r.distance);
-                string shadowText = "No Shadow";
-                if (r.shadow) shadowText = "With Shadow";
+                string shadowText = "0";
+                if (r.shadow) shadowText = "1";
                 info.Save(outputFileName,r.distance.ToString("F4")+", "+ shadowText+", "+r.projectile+",");
             }
         }
