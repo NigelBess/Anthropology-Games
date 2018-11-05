@@ -295,6 +295,7 @@ MonoBehaviour:
   - scores: []
     completed: 0
   thirdPersonMode: 0
+  mainFileName: _main
 --- !u!4 &359778255
 Transform:
   m_ObjectHideFlags: 0

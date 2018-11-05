@@ -6,7 +6,7 @@ using UnityEngine.UI;
 
 public class MenuGameManager : MonoBehaviour
 {
-    [SerializeField]private PlayerInfo info;
+    private PlayerInfo info;
     [SerializeField] private InfoUI[] ui;
     [SerializeField] private Button doubleCheckButton;
     [SerializeField] private Text doubleCheckButtonText;
@@ -16,11 +16,15 @@ public class MenuGameManager : MonoBehaviour
     private void Start()
     {
         info = PlayerInfo.instance;
-        for(int i = 0;i<info.games.Length;i++)
+        if (info != null)
         {
-            ui[i].Set(info.games[i],(PlayerInfo.Game)i);
+            for (int i = 0; i < info.games.Length; i++)
+            {
+                ui[i].Set(info.games[i], (PlayerInfo.Game)i);
+            }
+            SetText();
         }
-        SetText();
+        
     }
     private void SetText()
     {
@@ -84,11 +88,12 @@ public class MenuGameManager : MonoBehaviour
     {
         if (info.games[(int)game].completed)
         {
-            cm.AreYouSure2();
-            doubleCheckButton.onClick.RemoveAllListeners();
-            doubleCheckButton.onClick.AddListener(delegate { SceneManager.LoadScene(sceneName); });
-            doubleCheckText.text = "You have already completed this task.\nWould you like to play again?";
-            doubleCheckButtonText.text = "Play Again";
+            return;
+            //cm.AreYouSure2();
+            //doubleCheckButton.onClick.RemoveAllListeners();
+            //doubleCheckButton.onClick.AddListener(delegate { SceneManager.LoadScene(sceneName); });
+            //doubleCheckText.text = "You have already completed this task.\nWould you like to play again?";
+            //doubleCheckButtonText.text = "Play Again";
         }
         else
         {

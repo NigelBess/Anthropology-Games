@@ -60,7 +60,6 @@ public class RotationGameManager : MonoBehaviour
             answerImages[i].sprite = questions[num].answerSprites[i];
         }
         currentQuestion = num;
-        submitButton.interactable = false;
         SetOutlines();
     }
     public void SelectAnswer(int choice)
@@ -84,10 +83,6 @@ public class RotationGameManager : MonoBehaviour
             {
                 results[currentQuestion].choice[i] = choice;
                 selectionNumber = i;
-                if (selectionNumber >= 1)
-                {
-                    submitButton.interactable = true;
-                }
                 SetOutlines();
                 return;
             }
@@ -96,6 +91,7 @@ public class RotationGameManager : MonoBehaviour
     }
     private void SetOutlines()
     {
+        submitButton.interactable = true;
         for (int i = 0; i < answerOutlines.Length; i++)
         {
             answerOutlines[i].enabled = false;
@@ -105,6 +101,11 @@ public class RotationGameManager : MonoBehaviour
                 {
                     answerOutlines[i].enabled = true;
                 }
+                if (num < 0)
+                {
+                    submitButton.interactable = false;
+                }
+
             }
         }
     }

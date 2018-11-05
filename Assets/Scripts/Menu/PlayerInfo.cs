@@ -1,5 +1,6 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -10,6 +11,8 @@ public class PlayerInfo : MonoBehaviour
     public bool thirdPersonMode = false;
     private string identifier;
     private DataLogger dl;
+    [SerializeField] private string mainFileName;
+    
     
     public enum Game
     {
@@ -55,5 +58,21 @@ public class PlayerInfo : MonoBehaviour
     {
         dl.Save( identifier +"_" + fileName,data);
     }
-
+    public bool AreAllComplete()
+    {
+        foreach (gameInfo g in games)
+        {
+            if (!g.completed) return false;
+        }
+        return true;
+    }
+    public void SaveTotal()
+    {
+        string data = identifier + ", ";
+        for (int i = 0; i < games.Length; i++)
+        {
+           data += games[i].scores.Average().ToString("F3")+", ";
+        }
+        dl.Save(mainFileName,data);
+    }
 }
