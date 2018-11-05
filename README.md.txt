@@ -7,8 +7,8 @@ Here are the formats for all the data files:
 Mental Rotation:
 outcome, choice, time, question,
 
-outcome : 0 (incorrect) or 1 (correct)
-choice : which option did they choose? (0, 1, 2, or 3) 
+outcome :  0 (incorrect or did not choose) or 1 (correct)
+choice : which option did they choose? (0, 1, 2, or 3. Or -1 if they didnt answer in time) 
 time : time in seconds since the game started
 question : which question are they answering (0 through 9)
 

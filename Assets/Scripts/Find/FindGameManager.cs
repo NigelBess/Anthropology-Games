@@ -45,10 +45,10 @@ public class FindGameManager : MonoBehaviour
         currentAnimal++;
         if (currentAnimal >= animalCanavases.Length)
         {
-            SaveResults();
             cm.GameComplete();
             CloseAnimals();
             SetResultsText();
+            SaveResults();
         }
         else
         {

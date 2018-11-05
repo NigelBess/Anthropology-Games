@@ -31,13 +31,19 @@ public class Animal : MonoBehaviour
 
     private void Awake()
     {
-        currentAction = action.none;
         initalRotation = transform.rotation;
         initialPosition = transform.position;
         anim = GetComponent<Animator>();
         agent = GetComponent<NavMeshAgent>();
+        Reset();
     }
-
+    public void Reset()
+    {
+        transform.position = initialPosition;
+        transform.rotation = initalRotation;
+        StopAllCoroutines();
+        transform.gameObject.SetActive(true);
+    }
     public void RandomActionAfter(float time)
     {
         StartCoroutine(RandomActionCrt(time));

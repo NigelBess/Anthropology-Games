@@ -40,7 +40,7 @@ public class InfoUI : MonoBehaviour
                 units = "seconds";
                 break;
         }
-        infoText.text = "Average Score: <color=yellow>" + gi.scores.Average().ToString("F2") + "</color> "+ units;
+        infoText.text = "Average Score: <color=yellow>" + gi.scores.Average().ToString("F2") + "</color> ";
         playButton.targetGraphic.color = completeColor;
     }
     public void DetailedInfo()

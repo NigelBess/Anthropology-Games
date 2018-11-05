@@ -1,5 +1,6 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
 using UnityEngine.UI;
 using UnityEngine.SceneManagement;
@@ -10,11 +11,13 @@ public class RotationGameManager : MonoBehaviour
     [SerializeField] private CanvasManager cm;
     [SerializeField] private Question[] questions = new Question[10];
     [SerializeField] private Image[] answerImages = new Image[4];
+    private Outline[] answerOutlines;
     [SerializeField] private Image originalImage;
     [SerializeField] private Sprite emptySprite;
     [SerializeField] private RotationTimer timer;
     [SerializeField] private Text[] resultsText;
     [SerializeField] private Text mainResultsText;
+    [SerializeField] private Button submitButton;
     private PlayerInfo info;
     private Result[] results;
     private int currentQuestion;
@@ -23,19 +26,31 @@ public class RotationGameManager : MonoBehaviour
     {
         public Sprite originalSprite;
         public Sprite[] answerSprites;
-        public int rightAnswer;
-
+        public int[] rightAnswers;
     }
     [System.Serializable]
     private struct Result
     {
-        public int choice;
-        public bool correct;
+        public int[] choice;
+        public int score;
         public float time;
     }
     private void Awake()
     {
+        answerOutlines = new Outline[answerImages.Length];
+        for (int i = 0; i< answerImages.Length;i++)
+        {
+            answerOutlines[i] = answerImages[i].GetComponent<Outline>();
+        }
         results = new Result[questions.Length];
+        for (int i = 0; i < results.Length; i++)
+        {
+            results[i].choice = new int[2];
+            results[i].choice[0] = -1;
+            results[i].choice[1] = -1;
+            results[i].score = 0;
+            results[i].time = 0.0f;
+        }
     }
     public void SetQuestion(int num)
     {
@@ -45,13 +60,76 @@ public class RotationGameManager : MonoBehaviour
             answerImages[i].sprite = questions[num].answerSprites[i];
         }
         currentQuestion = num;
+        submitButton.interactable = false;
+        SetOutlines();
     }
-    public void Answer(int choice)
+    public void SelectAnswer(int choice)
     {
         EventSystem.current.SetSelectedGameObject(null);
-        results[currentQuestion].choice = choice;
-        results[currentQuestion].correct = choice == questions[currentQuestion].rightAnswer;
-        results[currentQuestion].time = timer.GetTime();
+        //check if choice has already been selected
+        for (int i = 0; i < results[currentQuestion].choice.Length; i++)
+        {
+            if (results[currentQuestion].choice[i] == choice)
+            {
+                results[currentQuestion].choice[i] = -1;
+                SetOutlines();
+                return;
+            }
+        }
+        int selectionNumber = 0;
+        //if we make it this far the choice has not been selected yet
+        for (int i = 0; i < results[currentQuestion].choice.Length; i++)
+        {
+            if ((results[currentQuestion].choice[i] == -1) || (i == results[currentQuestion].choice.Length - 1))
+            {
+                results[currentQuestion].choice[i] = choice;
+                selectionNumber = i;
+                if (selectionNumber >= 1)
+                {
+                    submitButton.interactable = true;
+                }
+                SetOutlines();
+                return;
+            }
+        }
+       
+    }
+    private void SetOutlines()
+    {
+        for (int i = 0; i < answerOutlines.Length; i++)
+        {
+            answerOutlines[i].enabled = false;
+            foreach (int num in results[currentQuestion].choice)
+            {
+                if (i == num)
+                {
+                    answerOutlines[i].enabled = true;
+                }
+            }
+        }
+    }
+    public void Submit()
+    {
+        EventSystem.current.SetSelectedGameObject(null);
+       results[currentQuestion].score = 0;
+        int[] submittedAnswers = new int[results[currentQuestion].choice.Length];
+        for (int i = 0; i<submittedAnswers.Length;i++)
+        {
+            submittedAnswers[i] = -1;
+        }
+        for (int i = 0; i < results[currentQuestion].choice.Length; i++)
+        {
+            if (System.Array.IndexOf(questions[currentQuestion].rightAnswers,results[currentQuestion].choice[i])!=-1)
+            {
+                if (System.Array.IndexOf(submittedAnswers,results[currentQuestion].choice[i])==-1)
+                {
+                    results[currentQuestion].score++;
+                    submittedAnswers[i] = results[currentQuestion].choice[i];
+                }
+                
+            }
+        }
+        
         NextQuestion();
     }
     public void StartPlaying()
@@ -76,25 +154,26 @@ public class RotationGameManager : MonoBehaviour
     public void GameComplete()
     {
         cm.GameComplete();
+        timer.StopTimer();
         string answer;
         int numCorrect = 0;
         for (int i = 0; i < questions.Length; i++)
         {
-            if (results[i].correct) numCorrect++;
+            numCorrect+=results[i].score;
         }
-        mainResultsText.text = "Score :" +"<color=yellow>" + numCorrect.ToString()+ "/" + questions.Length.ToString() + "</color>";
+        mainResultsText.text = "Score :" +"<color=yellow>" + numCorrect.ToString()+ "/" + (results[0].choice.Length*questions.Length).ToString() + "</color>";
         for(int i = 0; i < resultsText.Length; i++)
         {
             
             if (i < questions.Length)
             {
-                if (results[i].correct)
+                if (results[i].score==2)
                 {
-                    answer = "<color=#00FF00>Correct</color>";
+                    answer = "<color=#00FF00>2/2</color>";
                 }
                 else
                 {
-                    answer = "<color=#FF0000>Incorrect</color>";
+                    answer = "<color=#FF0000>"+results[i].score.ToString()+"/2</color>";
                 }
                 resultsText[i].text = "Object " + (i+1).ToString() + ": " + answer;
             }
@@ -109,7 +188,7 @@ public class RotationGameManager : MonoBehaviour
             info.LogScore(PlayerInfo.Game.rotation,(float)numCorrect/(float)questions.Length);
             for (int i = 0; i < questions.Length; i++)
             {
-                string dataString = (System.Convert.ToInt32(results[i].correct)).ToString() + ", " + results[i].choice.ToString() + ", " + results[i].time.ToString("F3") + ", " + i.ToString() + ","; 
+                string dataString = (System.Convert.ToInt32(results[i].score)).ToString() + ", " + results[i].choice.ToString() + ", " + results[i].time.ToString("F3") + ", " + i.ToString() + ","; 
                 info.Save("Mental_Rotation",dataString);
             }
             }

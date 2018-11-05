@@ -9,13 +9,22 @@ public class TrackGameManager : MonoBehaviour
     [SerializeField]private Animal animal;
     [SerializeField]private CanvasManager cm;
     [SerializeField] private GameObject[] interfaceContents;
-    [SerializeField] private Text gameCompleteText;
+    [SerializeField] private Text[] resultsText;
+    [SerializeField] private int numTrials;
+    [SerializeField] private Text trialsRemainingText;
+    private int currentTrial;
     private PlayerInfo info;
-
+    private float[] scores;
+    private void Awake()
+    {
+        currentTrial = 0;
+        scores = new float[numTrials];
+    }
     public void StartPlay()
     {
-        cm.HUD();
-        animal.transform.gameObject.SetActive(true);
+        trialsRemainingText.text = "Trials Remaining: <color=yellow>" + (numTrials - currentTrial).ToString() + "</color>";
+       cm.HUD();
+        animal.Reset();
         GameFunctions.OpenMenu(interfaceContents,0);
     }
     public void Play()
@@ -26,14 +35,40 @@ public class TrackGameManager : MonoBehaviour
     public void LogDistance(float distance)
     {
         animal.transform.gameObject.SetActive(false);
+        scores[currentTrial] = distance;
+        currentTrial++;
+        if (currentTrial >= numTrials)
+        {
+            GameComplete();
+        }
+        else
+        {
+            StartPlay();
+        }
+    }
+    public void GameComplete()
+    {
         cm.GameComplete();
         GameFunctions.OpenMenu(interfaceContents, 2);
-        gameCompleteText.text = "<color=yellow>" + distance.ToString("F2") + "</color> pixels";
+        for (int i = 0; i < resultsText.Length; i++)
+        {
+            if (i >= scores.Length)
+            {
+                resultsText[i].text = "";
+            }
+            else
+            {
+                resultsText[i].text = scores[i].ToString("F2") + "<color=white> pixels</color>";
+            }
+        }
         if (info == null) info = PlayerInfo.instance;
         if (info != null)
         {
-            info.LogScore(PlayerInfo.Game.track,distance);
-            info.Save("Animal_Tracking", distance.ToString("F3")+",");
+            for (int i = 0; i < scores.Length; i++)
+            {
+                info.LogScore(PlayerInfo.Game.track, scores[i]);
+                info.Save("Animal_Tracking", scores[i].ToString("F3") + ",");
+            }
         }
     }
     public void Reset()

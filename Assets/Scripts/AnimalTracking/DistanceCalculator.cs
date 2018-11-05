@@ -24,8 +24,11 @@ public class DistanceCalculator : MonoBehaviour
         if (!screenRect.Contains(target.position))
         {
             gm.LogDistance(avgDist);
-            enabled = false;
-            target.gameObject.SetActive(false);
+            currentDist = 0;
+            avgDist = 0;
+            numFrames = 0;
+            //enabled = false;
+            //target.gameObject.SetActive(false);
             return;
         }
         currentDist = Vector2.Distance(Input.mousePosition,target.position);
