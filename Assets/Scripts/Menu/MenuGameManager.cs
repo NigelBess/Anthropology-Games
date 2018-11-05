@@ -13,7 +13,6 @@ public class MenuGameManager : MonoBehaviour
     [SerializeField] private Text doubleCheckText;
     [SerializeField] private CanvasManager cm;
     [SerializeField] private Text titleText;
-    [SerializeField] private Text welcomeText;
     private void Start()
     {
         info = PlayerInfo.instance;
@@ -38,7 +37,6 @@ public class MenuGameManager : MonoBehaviour
         if (any)
         {
             titleText.text = "Please complete all remaining tasks, marked in <color=#00FF00>green</color>.";
-            welcomeText.enabled = false;
             all = true;
             for (int i = 0; i < info.games.Length; i++)
             {
@@ -80,7 +78,7 @@ public class MenuGameManager : MonoBehaviour
     public void ResetEverything()
     {
         Destroy(info.transform.gameObject);
-        SceneManager.LoadScene("Menu");
+        SceneManager.LoadScene("Welcome");
     }
     private void TryToLoad(string sceneName, PlayerInfo.Game game)
     {

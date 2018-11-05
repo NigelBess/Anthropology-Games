@@ -1926,6 +1926,12 @@ RectTransform:
   m_PrefabParentObject: {fileID: 224035431031166988, guid: e9d3fd35e3a66334198754cbc029d9e1,
     type: 2}
   m_PrefabInternal: {fileID: 60122256}
+--- !u!114 &747814771 stripped
+MonoBehaviour:
+  m_PrefabParentObject: {fileID: 114666997821084686, guid: e9d3fd35e3a66334198754cbc029d9e1,
+    type: 2}
+  m_PrefabInternal: {fileID: 60122256}
+  m_Script: {fileID: 1392445389, guid: f70555f144d8491a825f0804e09c671c, type: 3}
 --- !u!1 &881614857
 GameObject:
   m_ObjectHideFlags: 0
@@ -4949,7 +4955,7 @@ MonoBehaviour:
     - {fileID: 21300000, guid: 079083aa6682e74499a9aa737ca080f6, type: 3}
     - {fileID: 21300000, guid: d3656fe5b9aa54b44bf1b681e1a2dcc7, type: 3}
     - {fileID: 21300000, guid: 7ad75ee5d8fdc0c40a093f9f41e0bd49, type: 3}
-    rightAnswers: 
+    rightAnswers: 0000000002000000
   - originalSprite: {fileID: 21300000, guid: aafe5bc3ad8166440886ed1a9189f392, type: 3}
     answerSprites:
     - {fileID: 21300000, guid: 4dfed2d3a2e19574f9965e085ea10aec, type: 3}
@@ -4991,6 +4997,7 @@ MonoBehaviour:
   - {fileID: 1363867984}
   - {fileID: 920738857}
   mainResultsText: {fileID: 6158743}
+  submitButton: {fileID: 747814771}
 --- !u!4 &2065417816
 Transform:
   m_ObjectHideFlags: 0

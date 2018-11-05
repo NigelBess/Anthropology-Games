@@ -40,8 +40,12 @@ public class PlayerInfo : MonoBehaviour
             DontDestroyOnLoad(this);
         }
         dl = GetComponent<DataLogger>();
-        identifier = GameFunctions.RandomString(16);
+        SetID(GameFunctions.RandomString(16));
 	}
+    public void SetID(string id)
+    {
+        identifier = id;
+    }
     public void LogScore(Game game,float score)
     {
         if (!games[(int)game].completed) games[(int)game].completed = true;
